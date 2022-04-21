@@ -1,0 +1,37 @@
+---
+# Deployment Loki
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels: 
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      serviceAccountName: grafana
+      containers:
+        - name: grafana
+          image: grafana/grafana:8.4.5
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 300m
+              memory: 0.5Gi
+          ports:
+          - name: grafana
+            protocol: TCP
+            containerPort: 3000
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: grafana
